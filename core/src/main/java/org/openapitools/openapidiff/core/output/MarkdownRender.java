@@ -426,14 +426,12 @@ public class MarkdownRender implements Render {
 
   protected String property(
       int deepness, String title, String name, String type, String description) {
-    if (description.isEmpty()) {
-      return format(
-              "%s* %s `%s` (%s)\n",
-              indent(deepness), title, name, type);
+    if (StringUtils.isBlank(description)) {
+      return format("%s* %s `%s` (%s)\n", indent(deepness), title, name, type);
     }
     return format(
-            "%s* %s `%s` (%s)\n%s\n",
-            indent(deepness), title, name, type, metadata(indent(deepness + 1), description));
+        "%s* %s `%s` (%s)\n%s\n",
+        indent(deepness), title, name, type, metadata(indent(deepness + 1), description));
   }
 
   protected String listDiff(int deepness, String name, ChangedList<?> listDiff) {
