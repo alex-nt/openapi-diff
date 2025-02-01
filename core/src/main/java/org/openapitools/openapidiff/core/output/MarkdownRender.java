@@ -77,11 +77,11 @@ public class MarkdownRender implements Render {
   }
 
   protected String itemEndpoint(String method, String path, String summary) {
-    return H5 + CODE + method + CODE + " " + path + "\n\n" + metadata(summary) + "\n";
+    return H5 + CODE + method + CODE + " " + path + "\n" + metadata(summary) + "\n";
   }
 
   protected String itemEndpoint(String method, String path, ChangedMetadata summary) {
-    return H5 + CODE + method + CODE + " " + path + "\n\n" + metadata("summary", summary) + "\n";
+    return H5 + CODE + method + CODE + " " + path + "\n" + metadata("summary", summary) + "\n";
   }
 
   protected String titleH5(String title) {
@@ -164,7 +164,11 @@ public class MarkdownRender implements Render {
     if (!code.equals("default") && !code.matches("[1-5]XX")) {
       status = HttpStatus.getReasonPhrase(Integer.parseInt(code));
     }
-    sb.append(format("%s : **%s %s**\n", title, code, status));
+    if (status.isEmpty()) {
+      sb.append(format("%s : **%s**\n", title, code));
+    } else {
+      sb.append(format("%s : **%s %s**\n", title, code, status));
+    }
     sb.append(metadata(description));
     return sb.toString();
   }
@@ -201,7 +205,7 @@ public class MarkdownRender implements Render {
   }
 
   protected String itemHeader(String title, String mediaType, String description) {
-    return format("%s : `%s`\n\n", title, mediaType) + metadata(description) + '\n';
+    return format("%s : `%s`\n", title, mediaType) + metadata(description) + '\n';
   }
 
   protected String bodyContent(String prefix, ChangedContent changedContent) {
@@ -236,7 +240,7 @@ public class MarkdownRender implements Render {
   }
 
   protected String itemContent(String title, String mediaType) {
-    return format("%s : `%s`\n\n", title, mediaType);
+    return format("%s : `%s`\n", title, mediaType);
   }
 
   protected String itemContent(String title, String mediaType, MediaType content) {
@@ -333,7 +337,7 @@ public class MarkdownRender implements Render {
     }
     if (schema.getOneOf() != null) {
       LOGGER.debug("One of schema");
-      sb.append(format("%sOne of:\n\n", indent(deepness)));
+      sb.append(format("%sOne of:\n", indent(deepness)));
       schema.getOneOf().stream()
           .map(this::resolve)
           .forEach(composedChild -> sb.append(schema(deepness + 1, composedChild, context)));
@@ -422,9 +426,14 @@ public class MarkdownRender implements Render {
 
   protected String property(
       int deepness, String title, String name, String type, String description) {
+    if (description.isEmpty()) {
+      return format(
+              "%s* %s `%s` (%s)\n",
+              indent(deepness), title, name, type);
+    }
     return format(
-        "%s* %s `%s` (%s)\n%s\n",
-        indent(deepness), title, name, type, metadata(indent(deepness + 1), description));
+            "%s* %s `%s` (%s)\n%s\n",
+            indent(deepness), title, name, type, metadata(indent(deepness + 1), description));
   }
 
   protected String listDiff(int deepness, String name, ChangedList<?> listDiff) {
@@ -438,7 +447,7 @@ public class MarkdownRender implements Render {
   protected <T> String listItem(int deepness, String name, List<T> list) {
     StringBuilder sb = new StringBuilder();
     if (list != null && !list.isEmpty()) {
-      sb.append(format("%s%s value%s:\n\n", indent(deepness), name, list.size() > 1 ? "s" : ""));
+      sb.append(format("%s%s value%s:\n", indent(deepness), name, list.size() > 1 ? "s" : ""));
       list.forEach(p -> sb.append(format("%s* `%s`\n", indent(deepness), p)));
     }
     return sb.toString();
@@ -498,7 +507,7 @@ public class MarkdownRender implements Render {
     }
     if (!isUnchanged(changedMetadata) && showChangedMetadata) {
       return format(
-          "Changed %s:\n%s\nto:\n%s\n\n",
+          "Changed %s:\n%s\nto:\n%s\n",
           name,
           metadata(beginning, changedMetadata.getLeft()),
           metadata(beginning, changedMetadata.getRight()));
