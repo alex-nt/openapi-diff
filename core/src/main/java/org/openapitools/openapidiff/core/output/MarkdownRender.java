@@ -283,7 +283,6 @@ public class MarkdownRender implements Render {
     if (!required.isEmpty()) {
       sb.append(format("\n%s* %s:\n", indent(deepness), title));
       required.forEach(s -> sb.append(format("%s- `%s`\n", indent(deepness + 1), s)));
-      sb.append("\n");
     }
     return sb.toString();
   }
