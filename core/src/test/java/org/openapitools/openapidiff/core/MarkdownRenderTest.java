@@ -46,8 +46,7 @@ public class MarkdownRenderTest {
     MarkdownRender render = new MarkdownRender();
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-    ChangedOpenApi diff =
-            OpenApiCompare.fromLocations("a-before.yaml", "a-next.yaml");
+    ChangedOpenApi diff = OpenApiCompare.fromLocations("a-before.yaml", "a-next.yaml");
     render.render(diff, outputStreamWriter);
     assertThat(outputStream.toString()).isNotBlank();
   }

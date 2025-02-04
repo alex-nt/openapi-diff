@@ -729,15 +729,23 @@ components:
       required:
         - name
         - photoUrls
+        - category
       type: object
       properties:
         id:
           type: integer
-          format: int64
+          format: int32
           examples: [10]
         name:
           type: string
+          description: name of the pet
           examples: [doggie]
+        species:
+          type: string
+          description: Pet species
+        continent:
+          type: string
+          description: Continent
         category:
           $ref: '#/components/schemas/Category'
         photoUrls:
@@ -760,7 +768,7 @@ components:
           enum:
             - available
             - pending
-            - sold
+            - rented
       xml:
         name: pet
     ApiResponse:

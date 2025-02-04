@@ -281,8 +281,8 @@ public class MarkdownRender implements Render {
   protected String required(int deepness, String title, List<String> required) {
     StringBuilder sb = new StringBuilder();
     if (!required.isEmpty()) {
-      sb.append(format("%s%s:\n", indent(deepness), title));
-      required.forEach(s -> sb.append(format("%s- `%s`\n", indent(deepness), s)));
+      sb.append(format("\n%s* %s:\n", indent(deepness), title));
+      required.forEach(s -> sb.append(format("%s- `%s`\n", indent(deepness + 1), s)));
       sb.append("\n");
     }
     return sb.toString();
@@ -448,6 +448,7 @@ public class MarkdownRender implements Render {
     if (list != null && !list.isEmpty()) {
       sb.append(format("%s%s value%s:\n", indent(deepness), name, list.size() > 1 ? "s" : ""));
       list.forEach(p -> sb.append(format("%s* `%s`\n", indent(deepness), p)));
+      sb.append("\n");
     }
     return sb.toString();
   }
