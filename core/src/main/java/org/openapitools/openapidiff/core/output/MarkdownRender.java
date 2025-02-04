@@ -62,7 +62,7 @@ public class MarkdownRender implements Render {
   }
 
   protected String sectionTitle(String title) {
-    return H4 + title + '\n' + HR + '\n';
+    return H4 + title + "\n\n" + HR + '\n';
   }
 
   protected void listEndpoints(
@@ -134,6 +134,7 @@ public class MarkdownRender implements Render {
     StringBuilder sb = new StringBuilder();
     responses.entrySet().stream()
         .map(e -> this.itemResponse(title, e.getKey(), e.getValue()))
+        .map(s -> s + "\n")
         .forEach(sb::append);
     return sb.toString();
   }
@@ -538,7 +539,7 @@ public class MarkdownRender implements Render {
 
   protected String blockquote(String beginning, String text) {
     String blockquote = blockquote(beginning);
-    return blockquote + text.trim().replace("\n", "\n" + blockquote) + "\n\n";
+    return blockquote + text.trim().replace("\n", "\n" + blockquote) + "\n";
   }
 
   protected String type(Schema<?> schema) {

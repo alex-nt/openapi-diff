@@ -40,4 +40,15 @@ public class MarkdownRenderTest {
     render.render(diff, outputStreamWriter);
     assertThat(outputStream.toString()).isNotBlank();
   }
+
+  @Test
+  public void renderNestedBlockquotes() {
+    MarkdownRender render = new MarkdownRender();
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+    ChangedOpenApi diff =
+            OpenApiCompare.fromLocations("a-before.yaml", "a-next.yaml");
+    render.render(diff, outputStreamWriter);
+    assertThat(outputStream.toString()).isNotBlank();
+  }
 }
