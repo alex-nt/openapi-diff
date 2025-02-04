@@ -379,7 +379,7 @@ public class MarkdownRender implements Render {
   protected String items(int deepness, String title, String type, String description) {
     return format(
         "%s%s (%s):" + "\n%s\n",
-        indent(deepness), title, type, metadata(indent(deepness + 1), description));
+        indent(deepness), title, type, metadata(indent(deepness), description));
   }
 
   protected String properties(
